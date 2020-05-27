@@ -6,7 +6,7 @@ import SignIn from "./components/SignIn/SignIn";
 import Register from "./components/Register/Register";
 import Logo from "./components/Logo/Logo";
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
-import Amount from "./components/Amount/Amount";
+import Rank from "./components/Rank/Rank";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import Particles from "react-particles-js";
 
@@ -35,8 +35,28 @@ class App extends Component {
       imgUrl: "",
       box: {},
       route: "signIn",
+      isSignedIn: false,
+      user: {
+        id: "",
+        name: "",
+        email: "",
+        entries: 0,
+        joined: "",
+      },
     };
   }
+
+  loadUser = (data) => {
+    this.setState({
+      user: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries: data.entries,
+        joined: data.joined,
+      },
+    });
+  };
 
   onInputChange = (event) => {
     this.setState({ input: event.target.value });
@@ -45,7 +65,7 @@ class App extends Component {
   calculateFaceLocation = (data) => {
     const clarifaiFace =
       data.outputs[0].data.regions[0].region_info.bounding_box;
-    // console.log(clarifaiFace);
+    console.log(clarifaiFace);
     const image = document.getElementById("InputImage");
     const width = Number(image.width);
     const height = Number(image.height);
@@ -70,29 +90,43 @@ class App extends Component {
   };
 
   onRouteChange = (route) => {
+    if (route === "signOut") {
+      this.setState({ isSignedIn: false });
+    } else if (route === "home") {
+      this.setState({ isSignedIn: true });
+    }
     this.setState({ route: route });
   };
 
   render() {
-    const { imgUrl, box, route } = this.state;
+    const { imgUrl, box, route, isSignedIn } = this.state;
     return (
       <div className="App">
         <Particles className="particles" params={particlesOptions} />
+        <Navigation
+          isSignedIn={isSignedIn}
+          onRouteChange={this.onRouteChange}
+        />
         {route === "home" ? (
           <div>
-            <Navigation onRouteChange={this.onRouteChange} />
             <Logo />
-            <Amount />
+            <Rank
+              name={this.state.user.name}
+              entries={this.state.user.entries}
+            />
             <ImageLinkForm
               onInputChange={this.onInputChange}
               onButtonSubmit={this.onButtonSubmit}
             />
             <FaceRecognition box={box} imgUrl={imgUrl} />
           </div>
-        ) : route === "signIn" ? (
-          <SignIn onRouteChange={this.onRouteChange} />
+        ) : route === "register" ? (
+          <Register
+            loadUser={this.loadUser}
+            onRouteChange={this.onRouteChange}
+          />
         ) : (
-          <Register onRouteChange={this.onRouteChange} />
+          <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
         )}
       </div>
     );
