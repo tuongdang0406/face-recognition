@@ -79,7 +79,7 @@ class App extends Component {
 
   onPictureSubmit = () => {
     this.setState({ imgUrl: this.state.input });
-    fetch("http://localhost:3000/imageurl", {
+    fetch("https://shielded-reaches-62736.herokuapp.com/imageurl", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
