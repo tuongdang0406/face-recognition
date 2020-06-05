@@ -22,6 +22,10 @@ class Register extends Component {
     this.setState({ password: event.target.value });
   };
 
+  enterSignIn = (event) => {
+    if (event.which === 13) this.onSubmitSignIn();
+  };
+
   onSubmitSignIn = () => {
     fetch("http://localhost:3000/register", {
       method: "POST",
@@ -34,7 +38,7 @@ class Register extends Component {
     })
       .then((response) => response.json())
       .then((user) => {
-        if (user) {
+        if (user.id) {
           this.props.loadUser(user);
           this.props.onRouteChange("home");
         }
@@ -82,6 +86,7 @@ class Register extends Component {
                   name="password"
                   id="password"
                   onChange={this.onPasswordChange}
+                  onKeyPress={this.enterSignIn}
                 />
               </div>
             </fieldset>

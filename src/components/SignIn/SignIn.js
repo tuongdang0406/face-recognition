@@ -17,6 +17,10 @@ class SignIn extends Component {
     this.setState({ signInPassword: event.target.value });
   };
 
+  enterSignIn = (event) => {
+    if (event.which === 13) this.onSubmitSignIn();
+  };
+
   onSubmitSignIn = () => {
     fetch("http://localhost:3000/signin", {
       method: "POST",
@@ -29,7 +33,6 @@ class SignIn extends Component {
       .then((response) => response.json())
       .then((user) => {
         if (user.id) {
-          console.log(user.id);
           this.props.loadUser(user);
           this.props.onRouteChange("home");
         }
@@ -62,6 +65,7 @@ class SignIn extends Component {
                 </label>
                 <input
                   onChange={this.onPasswordChange}
+                  onKeyPress={this.enterSignIn}
                   className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
                   type="password"
                   name="password"
