@@ -1,6 +1,6 @@
 Full stack JavaScript applicaition, done with React.js, Node.js, PostgreSQL, using Clarify API and deployed on Heroku.
 
-Test the appp here: https://app-faceregco.herokuapp.com/
+Test the app here: https://app-faceregco.herokuapp.com/
 
 Features:
 
